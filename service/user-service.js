@@ -133,10 +133,10 @@ class UserSevice {
                 auth: {
                     username: 'WebInterface',
                     password: '90nexuB'
-                }, httpsAgent: agent
+                }, 
             })
 
-            return itiluser.data.map(user => new itiluserShema(user.ОсновнойEmail, user.Наименование))
+            return itiluser.data.map(user => new itiluserShema(user.ОсновнойEmail, user.Наименование, user.Уид))
         } catch (e) {
             next(e)
         }

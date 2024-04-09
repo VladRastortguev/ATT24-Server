@@ -1,8 +1,9 @@
 class itiluserShema {
-    constructor(email, name) {
+    constructor(email, name, uid) {
         this.email = email;
         this.name = name;
+        this.uid = uid;
     }
 }
 
-module.exports = itiluserShema
+module.exports = new itiluserShema()
