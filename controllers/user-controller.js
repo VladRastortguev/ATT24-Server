@@ -112,7 +112,69 @@ class UserController {
 
             return res.json(itiluser)
         } catch (e) {
-            next (e)
+            next(e)
+        }
+    }
+
+    async getOneCompany(req, res, next) {
+        try {
+            const oneCompanyItil = await userService.getOneCompany(req.params.uid)
+
+            return res.json(oneCompanyItil)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async setTask(req, res, next) {
+        try {
+            const obj = req.body[0]
+
+            const setTask = await userService.setTask(obj)
+
+            return res.json(setTask)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async getComment(req, res, next) {
+        try {
+            const comment = await userService.getComment(req.params.uid, req.params.tasktype)
+
+            return res.json(comment)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async getOneTask(req, res, next) {
+        try{
+            const oneTask = await userService.getOneTask(req.params.uid, req.params.tasktype)
+
+            return res.json(oneTask)
+        } catch(e) {
+            next(e)
+        }
+    }
+
+    async setComment(req, res, next) {
+        try {
+            await userService.setNewComment(req.body[0], req.params.uid, req.params.tasktype)
+
+            return '200'
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async getAllTask(req, res, next) {
+        try {
+            const allTask = await userService.getAllTask(req.params.email)
+
+            return res.json(allTask)
+        } catch (e) {
+            next(e)
         }
     }
 }
