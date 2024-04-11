@@ -16,6 +16,13 @@ router.get('/activate/:link/2', userController.activate2);
 router.get('/activate/:link/3', userController.activate3);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddlewaer,  userController.getUsers);
-router.get('/itiluser', userController.getItilUsers)
+
+router.get('/itiluser', userController.getItilUsers);
+router.get('/onecompany/:uid', userController.getOneCompany)
+router.post('/settask', userController.setTask)
+router.get('/getcomment/:uid/:tasktype', userController.getComment)
+router.get('/getonetask/:uid/:tasktype', userController.getOneTask)
+router.post('/setcomment/:uid/:tasktype', userController.setComment)
+router.get('/getalltask/:email', userController.getAllTask)
 
 module.exports = router

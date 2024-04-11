@@ -8,7 +8,10 @@ const ApiError = require('../exceptions/api-error');
 const { refresh } = require('../controllers/user-controller');
 const axios = require('axios')
 const https = require('https')
-const itiluserShema = require('../models/itil-model')
+const itiluserShema = require('../models/itil-model');
+const oneCompanyItil = require('../models/company-itil-model');
+const commentModel = require('../models/comment-model');
+const oneTaskModel = require('../models/oneTask-model');
 
 class UserSevice {
     async registration(email, password) {
@@ -133,12 +136,116 @@ class UserSevice {
                 auth: {
                     username: 'WebInterface',
                     password: '90nexuB'
-                }, 
+                }
             })
 
             return itiluser.data.map(user => new itiluserShema(user.ОсновнойEmail, user.Наименование, user.Уид))
         } catch (e) {
             next(e)
+        }
+    }
+
+    async getOneCompany(uid) {
+        const onecompany = await axios.get(`${process.env.API_ITIL}/company/${uid}`, {
+            auth: {
+                username: 'WebInterface',
+                password: '90nexuB'
+            }
+        })
+
+        return onecompany.data.map(company => new oneCompanyItil(company.Организация))
+    }
+
+    async setTask(obj) {
+        const setonetask = await axios.post(`${process.env.API_ITIL}/settask`, obj,{
+            auth: {
+                username: 'WebInterface',
+                password: '90nexuB'
+            }
+        })
+
+        return '200'
+    }
+
+    async getComment(uid, tasktype) {
+        try {   
+            const res = await axios.get(`${process.env.API_ITIL}/comment/${uid}/${tasktype}`, {
+                auth: {
+                    username: 'WebInterface',
+                    password: '90nexuB'
+                }
+            })
+
+            return res.data.map(comment => new commentModel(comment.UserName, comment.Текст, comment.Дата))
+        } catch (e) {
+            return e
+        }
+    }
+
+    async getOneTask(uid, tasktype) {
+        try {
+            const res = await axios.get(`${process.env.API_ITIL}/getonetask/${uid}/${tasktype}`, {
+                auth: {
+                    username: 'WebInterface',
+                    password: '90nexuB'
+                }
+            })
+
+            return res.data.map(onetask => new oneTaskModel(onetask.CurrentStage,
+                                                            onetask.DateOfCompletion,
+                                                            onetask.DateOfCreation,
+                                                            onetask.Executor,
+                                                            onetask.Initiator,
+                                                            onetask.Number,
+                                                            onetask.OrganizationClient,
+                                                            onetask.OrganizationExecutor,
+                                                            onetask.Priority,
+                                                            onetask.Service,
+                                                            onetask.TaskName,
+                                                            onetask.TaskType,
+                                                            onetask.UID
+                                                        ))
+        } catch (e) {
+            return e
+        }
+    }
+
+    async setNewComment(obj, uid, tasktype) {
+        await axios.post(`${process.env.API_ITIL}/comment/${uid}/${tasktype}`, obj, {
+            auth: {
+                username: 'WebInterface',
+                password: '90nexuB'
+            }
+        })
+
+        return '200'
+    }
+
+    async getAllTask(email) {
+        try {
+            const allTask = await axios.get(`${process.env.API_ITIL}/tasksget/${email}`, {
+                auth: {
+                    username: 'WebInterface',
+                    password: '90nexuB'
+                }
+            })
+
+            return allTask.data.map(onetask => new oneTaskModel(onetask.CurrentStage,
+                                                            onetask.DateOfCompletion,
+                                                            onetask.DateOfCreation,
+                                                            onetask.Executor,
+                                                            onetask.Initiator,
+                                                            onetask.Number,
+                                                            onetask.OrganizationClient,
+                                                            onetask.OrganizationExecutor,
+                                                            onetask.Priority,
+                                                            onetask.Service,
+                                                            onetask.TaskName,
+                                                            onetask.TaskType,
+                                                            onetask.UID
+            ))
+        } catch (e) {
+            return e
         }
     }
 }
