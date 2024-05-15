@@ -130,7 +130,7 @@ class UserController {
         try {
             const obj = req.body[0]
 
-            const setTask = await userService.setTask(obj)
+            const setTask = await userService.setTask(obj, req.params.email)
 
             return res.json(setTask)
         } catch (e) {
