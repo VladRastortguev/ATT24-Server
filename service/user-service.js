@@ -157,8 +157,8 @@ class UserSevice {
         return onecompany.data.map(company => new oneCompanyItil(company.Организация))
     }
 
-    async setTask(obj) {
-        const setonetask = await axios.post(`${process.env.API_ITIL}/settask`, obj,{
+    async setTask(obj, email) {
+        const setonetask = await axios.post(`${process.env.API_ITIL}/settask/${email}`, obj,{
             auth: {
                 username: 'WebInterface',
                 password: '90nexuB'
